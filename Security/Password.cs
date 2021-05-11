@@ -9,7 +9,7 @@ namespace HakerzyLib.Security
 {
     public class Password
     {
-        private int GanerateSaltForPassowrd()
+        public int GanerateSaltForPassowrd()
         {
             RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
             byte[] saltBytes = new byte[4];
@@ -17,7 +17,7 @@ namespace HakerzyLib.Security
             return (((int)saltBytes[0]) << 24) + (((int)saltBytes[1]) << 16) + (((int)saltBytes[2]) << 8) + ((int)saltBytes[3]);
         }
 
-        private byte[] ComputePasswordHash(string password, int salt)
+        public byte[] ComputePasswordHash(string password, int salt)
         {
             byte[] saltBytes = new byte[4];
             saltBytes[0] = (byte)(salt >> 24);
@@ -28,19 +28,18 @@ namespace HakerzyLib.Security
             byte[] passwordBytes = UTF8Encoding.UTF8.GetBytes(password);
 
             byte[] preHashed = new byte[saltBytes.Length + passwordBytes.Length];
-            System.Buffer.BlockCopy(passwordBytes, 0, preHashed, 0, passwordBytes.Length);
-            System.Buffer.BlockCopy(saltBytes, 0, preHashed, passwordBytes.Length, saltBytes.Length);
+            Buffer.BlockCopy(passwordBytes, 0, preHashed, 0, passwordBytes.Length);
+            Buffer.BlockCopy(saltBytes, 0, preHashed, passwordBytes.Length, saltBytes.Length);
 
             SHA1 sha1 = SHA1.Create();
             return sha1.ComputeHash(preHashed);
         }
 
-        private bool IsPassowrdValid(string passwordToValidate, int salt, byte[] correctPasswordHash)
+        public bool IsPassowrdValid(string passwordToValidate, int salt, byte[] correctPasswordHash)
         {
             byte[] hashedPassword = ComputePasswordHash(passwordToValidate, salt);
 
             return hashedPassword.SequenceEqual(correctPasswordHash);
         }
-
     }
 }
