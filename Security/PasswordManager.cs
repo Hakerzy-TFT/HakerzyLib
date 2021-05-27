@@ -7,9 +7,9 @@ using System.Security.Cryptography;
 
 namespace HakerzyLib.Security
 {
-    public class Password
+    public class PasswordManager
     {
-        public int GanerateSaltForPassowrd()
+        public int GenerateSaltForPassowrd()
         {
             RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
             byte[] saltBytes = new byte[4];
@@ -38,7 +38,6 @@ namespace HakerzyLib.Security
         public bool IsPassowrdValid(string passwordToValidate, int salt, byte[] correctPasswordHash)
         {
             byte[] hashedPassword = ComputePasswordHash(passwordToValidate, salt);
-
             return hashedPassword.SequenceEqual(correctPasswordHash);
         }
     }
